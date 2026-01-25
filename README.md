@@ -2,6 +2,14 @@
 
 Run Go code in the browser via WebAssembly with a React + TypeScript frontend.
 
+## How It Works
+
+1. Write Go code in `pkg/task/`
+2. Export functions in `wasm/main.go`
+3. **TinyGo** compiles Go → WebAssembly (304KB binary)
+4. **gowasm-bindgen** generates TypeScript bindings
+5. WASM runs in a **Web Worker** (doesn't block UI)
+
 ## Quick Start
 
 ```bash
@@ -39,6 +47,8 @@ Update these files with your project name:
 
 ## Adding Your Own Functions
 
+> **Why two files?** `pkg/task/` contains your business logic (testable without WASM). `wasm/main.go` exports functions to JavaScript.
+
 ### 1. Write Go logic
 
 ```go
@@ -71,12 +81,16 @@ const wasm = await Main.init('./worker.js');
 const result = await wasm.yourFunction("input");
 ```
 
-## Supported Types
+## Type Mapping
 
-- `int`, `float64`, `string`, `bool`
-- `[]byte` (as Uint8Array in JS)
-- Callbacks: `func(int, string)` etc.
-- Errors (returned as rejected promises)
+| Go | TypeScript |
+|----|------------|
+| `string` | `string` |
+| `int`, `float64` | `number` |
+| `bool` | `boolean` |
+| `[]byte` | `Uint8Array` |
+| `error` | rejected Promise |
+| `func(int, string)` | `(n: number, s: string) => void` |
 
 ## npm Scripts
 
@@ -89,10 +103,13 @@ const result = await wasm.yourFunction("input");
 
 ## Requirements
 
-- [Go 1.23+](https://go.dev/dl/)
-- [TinyGo](https://tinygo.org/getting-started/install/)
+- [Go 1.23+](https://go.dev/dl/) - The programming language
+- [TinyGo](https://tinygo.org/getting-started/install/) - Go compiler optimized for small WASM (304KB vs 2.4MB)
 - [Node.js 20+](https://nodejs.org/)
-- [gowasm-bindgen](https://github.com/13rac1/gowasm-bindgen): `go install github.com/13rac1/gowasm-bindgen/cmd/gowasm-bindgen@latest`
+- [gowasm-bindgen](https://github.com/13rac1/gowasm-bindgen) - Generates TypeScript bindings from Go
+  ```bash
+  go install github.com/13rac1/gowasm-bindgen/cmd/gowasm-bindgen@latest
+  ```
 
 ## Why Go in the Browser?
 
