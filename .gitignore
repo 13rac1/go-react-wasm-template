@@ -2,14 +2,16 @@
 node_modules/
 
 # Build outputs
-frontend/dist/
-frontend/public/task.wasm
-frontend/public/worker.js
-frontend/public/wasm_exec.js
+dist/
+
+# Generated WASM files (built by npm run wasm)
+public/wasm.wasm
+public/worker.js
+public/wasm_exec.js
 
 # Generated files
-frontend/src/generated/
-wasm/bindings_gen.go
+src/generated/
+go/wasm/bindings_gen.go
 
 # IDE
 .idea/
@@ -29,3 +31,5 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

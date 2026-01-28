@@ -4,15 +4,14 @@ Run Go code in the browser via WebAssembly with a React + TypeScript frontend.
 
 ## How It Works
 
-1. Write Go code in `pkg/task/`
-2. Export functions in `wasm/main.go`
+1. Write Go code in `go/pkg/task/`
+2. Export functions in `go/wasm/main.go`
 3. **gowasm-bindgen** compiles Go → WASM and generates TypeScript bindings
 4. WASM runs in a **Web Worker** (doesn't block UI)
 
 ## Quick Start
 
 ```bash
-cd frontend
 npm install
 npm run dev
 ```
@@ -24,33 +23,36 @@ Open http://localhost:5173
 Update these files with your project name:
 
 1. **Go modules** - Replace `github.com/user/go-wasm-react-starter`:
-   - `go.mod`
-   - `wasm/go.mod`
-   - `wasm/main.go` (import statement)
+   - `go/go.mod`
+   - `go/wasm/go.mod`
+   - `go/wasm/main.go` (import statement)
 
-2. **Package name** - Update `frontend/package.json`:
+2. **Package name** - Update `package.json`:
    - `"name": "your-project-name"`
 
 ## Project Structure
 
 ```
-├── pkg/task/task.go      # Your Go logic (testable without WASM)
-├── wasm/main.go          # WASM exports (what JS can call)
-├── frontend/
-│   ├── src/
-│   │   ├── App.tsx       # React app
-│   │   └── generated/    # Auto-generated TypeScript client
-│   └── public/           # WASM runtime (built automatically)
+├── src/                  # React app
+│   ├── App.tsx
+│   ├── useWasm.ts        # WASM hook
+│   └── generated/        # Auto-generated TypeScript client
+├── public/               # WASM runtime (built automatically)
+├── go/
+│   ├── pkg/task/task.go  # Your Go logic (testable without WASM)
+│   └── wasm/main.go      # WASM exports (what JS can call)
+├── package.json
+└── go/go.mod
 ```
 
 ## Adding Your Own Functions
 
-> **Why two files?** `pkg/task/` contains your business logic (testable without WASM). `wasm/main.go` exports functions to JavaScript.
+> **Why two files?** `go/pkg/task/` contains your business logic (testable without WASM). `go/wasm/main.go` exports functions to JavaScript.
 
 ### 1. Write Go logic
 
 ```go
-// pkg/task/task.go
+// go/pkg/task/task.go
 func YourFunction(input string) (string, error) {
     // Your logic here
     return result, nil
@@ -60,7 +62,7 @@ func YourFunction(input string) (string, error) {
 ### 2. Export for WASM
 
 ```go
-// wasm/main.go
+// go/wasm/main.go
 func YourFunction(input string) (string, error) {
     return task.YourFunction(input)
 }
@@ -97,11 +99,14 @@ const result = await wasm.yourFunction("input");
 | `npm run dev` | Start dev server |
 | `npm run build` | Production build |
 | `npm run wasm` | Rebuild WASM and TypeScript bindings |
+| `npm run test` | Run TypeScript tests |
+| `npm run test:go` | Run Go tests |
+| `npm run test:all` | Run all tests |
 
 ## Requirements
 
 - [Go 1.23+](https://go.dev/dl/) - The programming language
-- [TinyGo](https://tinygo.org/getting-started/install/) - Go compiler optimized for small WASM (304KB vs 2.4MB)
+- [TinyGo](https://tinygo.org/getting-started/install/) - Go compiler optimized for small WASM (~230KB vs 2.4MB)
 - [Node.js 20+](https://nodejs.org/)
 - [gowasm-bindgen](https://github.com/13rac1/gowasm-bindgen) - Compiles Go to WASM with TypeScript bindings
   ```bash
@@ -120,6 +125,7 @@ const result = await wasm.yourFunction("input");
 - **Go** → TinyGo → WebAssembly (~230KB)
 - **React 19** + TypeScript + Vite
 - **Tailwind CSS** for styling
+- **Vitest** for testing
 - **gowasm-bindgen** for compilation and type-safe bindings
 
 ## License

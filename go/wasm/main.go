@@ -26,7 +26,7 @@ func Fibonacci(n int, onProgress func(percent int, message string)) (string, err
 // =============================================================================
 //
 // Steps to add a new function:
-// 1. Write your logic in pkg/task/task.go
+// 1. Write your logic in go/pkg/task/task.go
 // 2. Create a wrapper function here that calls it
 // 3. Run `npm run wasm` to rebuild WASM and TypeScript bindings
 // 4. Use it in React: await wasm.yourFunction(args)
