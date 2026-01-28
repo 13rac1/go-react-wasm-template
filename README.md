@@ -11,6 +11,42 @@ Run Go code in the browser via WebAssembly with a React + TypeScript frontend.
 
 ## Quick Start
 
+### Install Dependencies
+
+<details>
+<summary><strong>macOS (Homebrew)</strong></summary>
+
+```bash
+brew install go node tinygo
+go install github.com/13rac1/gowasm-bindgen@latest
+```
+</details>
+
+<details>
+<summary><strong>Linux (Ubuntu/Debian)</strong></summary>
+
+```bash
+# Go
+wget https://go.dev/dl/go1.25.6.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.25.6.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Node.js
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# TinyGo
+wget https://github.com/tinygo-org/tinygo/releases/download/v0.40.1/tinygo_0.40.1_amd64.deb
+sudo dpkg -i tinygo_0.40.1_amd64.deb
+
+# gowasm-bindgen
+go install github.com/13rac1/gowasm-bindgen@latest
+```
+</details>
+
+### Run
+
 ```bash
 npm install
 npm run dev
@@ -113,13 +149,10 @@ const result = await wasm.yourFunction("input");
 
 ## Requirements
 
-- [Go 1.23+](https://go.dev/dl/) - The programming language
-- [TinyGo](https://tinygo.org/getting-started/install/) - Go compiler optimized for small WASM (~230KB vs 2.4MB)
+- [Go 1.24+](https://go.dev/dl/)
+- [TinyGo 0.40+](https://tinygo.org/getting-started/install/) - Produces ~230KB WASM vs 2.4MB with standard Go
 - [Node.js 20+](https://nodejs.org/)
-- [gowasm-bindgen](https://github.com/13rac1/gowasm-bindgen) - Compiles Go to WASM with TypeScript bindings
-  ```bash
-  go install github.com/13rac1/gowasm-bindgen@latest
-  ```
+- [gowasm-bindgen](https://github.com/13rac1/gowasm-bindgen) - `go install github.com/13rac1/gowasm-bindgen@latest`
 
 ## Why Go in the Browser?
 
